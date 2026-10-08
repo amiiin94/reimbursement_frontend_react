@@ -1,24 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from './components/pages/login';
+import RequestForm from './components/pages/reimbursement/RequestForm';
+import ItemForm from './components/pages/reimbursement/ItemForm';
+import ApprovalForm from './components/pages/approval/ApprovalForm';
+import Reimbursement from './components/pages/reimbursement';
+import Sidebar from './components/atom/Sidebar';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+  
+        <Sidebar>
+          <Reimbursement></Reimbursement  >
+      
+        </Sidebar>
+        
+   
+
+    </>
   );
 }
 
