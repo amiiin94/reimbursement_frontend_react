@@ -1,7 +1,9 @@
-function ApprovalForm() {
+import { Link } from 'react-router';
+
+ApprovalForm = () => {
 
     return (
-        <div className="max-w-2xl mx-auto my-6 p-6 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className=" mx-auto my-6 p-6 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">Reimbursement Approval</h2>
             
             <form className="space-y-6">
@@ -65,7 +67,13 @@ function ApprovalForm() {
                     />
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-end pt-4 border-t border-gray-100 gap-3">
+                    <Link
+                        to="/approval"
+                        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors cursor-pointer"
+                    >
+                        Kembali
+                    </Link>
                     <button
                         type="submit"
                         className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-6 py-2.5 text-center transition-colors cursor-pointer"
