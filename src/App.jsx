@@ -7,23 +7,25 @@ import Reimbursement from './components/pages/reimbursement';
 import Sidebar from './components/atom/Sidebar';
 import ReimbursementDetail from './components/pages/reimbursement/ReimbursementDetail';
 import Approval from './components/pages/approval';
+import NotFound from './components/pages/NotFound';
 
-App = () => {
+const App = () => {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
 
         <Route element={<Sidebar />}>
-          <Route path="/reimbursement" element={<Reimbursement />} />
+          <Route path="/" element={<Reimbursement />} />
           <Route path="/reimbursement/request" element={<RequestForm />} />
-          <Route path="/reimbursement/detail" element={<ReimbursementDetail />} />
+          <Route path="/reimbursement/detail/:id" element={<ReimbursementDetail />} />
 
           <Route path="/approval" element={<Approval />} />
-          <Route path="/approval/form" element={<ApprovalForm />} />
+          <Route path="/approval/form/:id" element={<ApprovalForm />} />
         </Route>
+
+        <Route path='*' element={<NotFound />} />
+   
       </Routes>
-    </BrowserRouter>
   );
 }
 

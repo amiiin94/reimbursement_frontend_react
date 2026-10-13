@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-ReimbursementDetail = () => {
+const ReimbursementDetail = () => {
     return (
         <>
             <div className=" mx-auto my-6 p-6 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">

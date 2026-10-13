@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import ItemForm from './ItemForm';
 
-RequestForm = () => {
+const RequestForm = () => {
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [items, setItems] = useState([]);
 

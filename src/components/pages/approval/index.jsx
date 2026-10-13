@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-Approval = () => {
+const Approval = () => {
   return (
     <>
       <div className="flex flex-row justify-between mb-4">

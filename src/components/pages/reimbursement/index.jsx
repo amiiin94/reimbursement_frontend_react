@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { dummyReimburse } from "../../../services/reimburseService";
 
-let Index = () => {
+const Index = () => {
   const [reimburse, setReimburse] = useState();
 
   useEffect(() => {

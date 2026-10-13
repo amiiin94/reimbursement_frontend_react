@@ -1,6 +1,17 @@
 import { NavLink, Outlet } from 'react-router';
 
-Sidebar = () => {
+const Sidebar = () => {
+  const navBarStyle = ({ isActive }) => {
+
+    return (
+      `flex items-center px-2 py-1.5 rounded-base transition-colors group ${
+                    isActive
+                      ? 'font-bold bg-neutral-tertiary text-fg-brand'
+                      : 'text-body hover:bg-neutral-tertiary hover:text-fg-brand hover:font-bold'
+                  }`
+    )
+  }
+
   return (
     <>
       <button
@@ -41,14 +52,8 @@ Sidebar = () => {
           <ul className="space-y-2 font-medium">
             <li>
               <NavLink
-                to="/reimbursement"
-                className={({ isActive }) =>
-                  `flex items-center px-2 py-1.5 rounded-base transition-colors group ${
-                    isActive
-                      ? 'font-bold bg-neutral-tertiary text-fg-brand'
-                      : 'text-body hover:bg-neutral-tertiary hover:text-fg-brand hover:font-bold'
-                  }`
-                }
+                to="/"
+                className={navBarStyle}
               >
                 <span className="flex-1 ms-3 whitespace-nowrap">Reimbursement</span>
               </NavLink>
@@ -56,13 +61,7 @@ Sidebar = () => {
             <li>
               <NavLink
                 to="/approval"
-                className={({ isActive }) =>
-                  `flex items-center px-2 py-1.5 rounded-base transition-colors group ${
-                    isActive
-                      ? 'font-bold bg-neutral-tertiary text-fg-brand'
-                      : 'text-body hover:bg-neutral-tertiary hover:text-fg-brand hover:font-bold'
-                  }`
-                }
+                className={navBarStyle}
               >
                 <span className="flex-1 ms-3 whitespace-nowrap">Approval</span>
               </NavLink>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-ItemForm = ({ isOpen = true, onClose, onSave }) => {
+const ItemForm = ({ isOpen = true, onClose, onSave }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [attachment, setAttachment] = useState(null);

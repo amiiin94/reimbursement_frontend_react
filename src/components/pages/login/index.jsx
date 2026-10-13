@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-Login = () => {
+const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
