@@ -139,7 +139,6 @@ const RequestForm = () => {
                 </div>
             </form>
 
-            {/* Modal Dialog ItemForm */}
             <ItemForm
                 isOpen={isItemModalOpen}
                 onClose={() => setIsItemModalOpen(false)}
