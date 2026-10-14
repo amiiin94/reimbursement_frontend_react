@@ -11,10 +11,12 @@ const ItemForm = ({ isOpen = true, onClose, onSave }) => {
         e.preventDefault();
         if (onSave) {
             onSave({
+                categoryId: 1,
                 description,
                 amount: parseFloat(amount) || 0,
-                attachment: attachment ? attachment.name : null,
+                attachmentUrl: attachment ? attachment.name : null,
                 file: attachment,
+                expenseDate: "2026-10-10"
             });
         }
   

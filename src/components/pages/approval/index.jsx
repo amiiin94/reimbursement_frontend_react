@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { ReimbursementService } from "../../../services/ReimbursementService";
 
 const Approval = () => {
+  const [reimburse, setReimburse] = useState();
+
+  useEffect(() => {
+    const fetchReimbursement = async () => {
+      const userId = localStorage.getItem("id")
+      try {
+      const response = await ReimbursementService.viewReimbursementBySupervisorId(userId);
+
+      setReimburse(response.data.data);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchReimbursement()
+  }, []);
   return (
     <>
       <div className="flex flex-row justify-between mb-4">
@@ -33,78 +51,40 @@ const Approval = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-neutral-primary border-b border-default">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-              >
-                RMB-001
-              </th>
-              <td className="px-6 py-4">1-1-2026</td>
-              <td className="px-6 py-4">Budi</td>
-              <td className="px-6 py-4">Perjalanan dinas</td>
-              <td className="px-6 py-4">
-                <span className="bg-gray-200 text-heading text-md font-medium px-1.5 py-0.5 rounded">
-                  Draft
-                </span>
-              </td>
-              <td className="px-6 py-4">
-                <Link
-                  to="/approval/form/RMB-001"
-                  className="font-medium text-fg-brand hover:underline"
-                >
-                  View
-                </Link>
-              </td>
-            </tr>
-            <tr className="bg-neutral-primary border-b border-default">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-              >
-                RMB-002
-              </th>
-              <td className="px-6 py-4">1-1-2026</td>
-              <td className="px-6 py-4">Budi</td>
-              <td className="px-6 py-4">menuju site</td>
-              <td className="px-6 py-4 ">
-                <span className="bg-yellow-200  text-heading text-md font-medium px-1.5 py-0.5 rounded">
-                  Revision
-                </span>
-              </td>
-              <td className="px-6 py-4">
-                <Link
-                  to="/approval/form/RMB-002"
-                  className="font-medium text-fg-brand hover:underline"
-                >
-                  View
-                </Link>
-              </td>
-            </tr>
-            <tr className="bg-neutral-primary">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-              >
-                RMB-003
-              </th>
-              <td className="px-6 py-4">1-1-2026</td>
-              <td className="px-6 py-4">Budi</td>
-              <td className="px-6 py-4">Acara 17 agustus</td>
-              <td className="px-6 py-4">
-                <span className="bg-red-500 text-white text-heading text-md font-medium px-1.5 py-0.5 rounded">
-                  Rejected
-                </span>
-              </td>
-              <td className="px-6 py-4">
-                <Link
-                  to="/approval/form/RMB-003"
-                  className="font-medium text-fg-brand hover:underline"
-                >
-                  View
-                </Link>
-              </td>
-            </tr>
+            {reimburse?.map((item, idx) => {
+              return (
+                <tr key={idx} className="bg-neutral-primary border-b border-default">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                  >
+                    {item.requestNumber}
+                  </th>
+                  <td className="px-6 py-4">{item.submitDate}</td>
+                  <td className="px-6 py-4">{item.name}</td>
+                  <td className="px-6 py-4">{item.description}</td>
+                  <td className="px-6 py-4">
+                    <span className="bg-gray-200 text-heading text-md font-medium px-1.5 py-0.5 rounded">
+                      {item.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <Link
+                      to="/reimbursement/request"
+                      className="font-medium text-fg-brand hover:underline mr-4"
+                    >
+                      Edit
+                    </Link>
+                    <Link
+                      to={`/reimbursement/detail/${item.code}`}
+                      className="font-medium text-fg-brand hover:underline"
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

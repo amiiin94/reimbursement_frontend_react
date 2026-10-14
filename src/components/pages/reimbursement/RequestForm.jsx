@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import ItemForm from './ItemForm';
+import { ReimbursementService } from '../../../services/ReimbursementService';
 
 const RequestForm = () => {
+    const navigate = useNavigate();
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [items, setItems] = useState([]);
 
@@ -10,51 +12,46 @@ const RequestForm = () => {
         setItems((prev) => [...prev, newItem]);
     };
 
+    const employeeId = localStorage.getItem("id");
+    const [description, setDescription] = useState('');
+
+    const handleSubmit = async (status) => {
+
+        const payload = {
+            employeeId: Number(employeeId),
+            description,
+            status: status,
+            items
+        }
+        console.log(payload)
+
+        try {
+            const response = await ReimbursementService.createReimbursement(payload);
+            console.log("Reimbursement created:", response.data);
+
+            navigate("/");
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     return (
         <div className=" mx-auto my-6 p-6 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">Reimbursement Request Form</h2>
             
-            <form className="space-y-6">
-                <div className="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label htmlFor="request_number" className="block mb-2 text-sm font-medium text-gray-900">
-                            Request Number:
-                        </label>
-                        <input
-                            type="text"
-                            id="request_number"
-                            name="request_number"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            placeholder="RMB/2026/0001"
-                            required
-                            disabled
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="submit_date" className="block mb-2 text-sm font-medium text-gray-900">
-                            Date:
-                        </label>
-                        <input
-                            type="date"
-                            id="submit_date"
-                            name="submit_date"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            required
-                        />
-                    </div>
-                </div>
+            <div className="space-y-6">
 
                 <div>
-                    <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900">
-                        Title:
+                    <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">
+                        description:
                     </label>
                     <input
-                        id="title"
-                        name="title"
+                        id="description"
+                        name="description"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                        placeholder="Reimbursement title..."
+                        placeholder="Reimbursement description..."
                         required
+                        onChange={(e) => {setDescription(e.target.value)}}
                     />
                 </div>
                 <button
@@ -117,27 +114,23 @@ const RequestForm = () => {
 
                 <div className="flex items-center justify-end pt-4 border-t border-gray-100">
                     <div className="flex items-center gap-3">
-                        <Link
-                            to="/reimbursement"
-                            className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors cursor-pointer"
-                        >
-                            Kembali
-                        </Link>
                         <button
                             type="button"
                             className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-6 py-2.5 text-center transition-colors cursor-pointer"
+                            onClick={() => handleSubmit("DRAFT")}
                         >
                             Draft
                         </button>
                         <button
                             type="submit"
                             className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-6 py-2.5 text-center transition-colors cursor-pointer"
+                            onClick={() => handleSubmit("SUBMIT")}
                         >
                             Submit
                         </button>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <ItemForm
                 isOpen={isItemModalOpen}

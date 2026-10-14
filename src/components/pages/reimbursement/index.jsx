@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { dummyReimburse } from "../../../services/reimburseService";
+import { ReimbursementService } from "../../../services/ReimbursementService";
 
 const Index = () => {
   const [reimburse, setReimburse] = useState();
 
   useEffect(() => {
-    setReimburse(dummyReimburse);
+    const fetchReimbursement = async () => {
+      const userId = localStorage.getItem("id")
+      try {
+      const response = await ReimbursementService.viewReimbursement(userId);
+
+      setReimburse(response.data.data);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchReimbursement()
   }, []);
 
   return (
@@ -43,20 +54,20 @@ const Index = () => {
             </tr>
           </thead>
           <tbody>
-            {reimburse?.map((element, idx) => {
+            {reimburse?.map((item, idx) => {
               return (
                 <tr key={idx} className="bg-neutral-primary border-b border-default">
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-heading whitespace-nowrap"
                   >
-                    {element.code}
+                    {item.requestNumber}
                   </th>
-                  <td className="px-6 py-4">{element.date}</td>
-                  <td className="px-6 py-4">{element.description}</td>
+                  <td className="px-6 py-4">{item.submitDate}</td>
+                  <td className="px-6 py-4">{item.description}</td>
                   <td className="px-6 py-4">
                     <span className="bg-gray-200 text-heading text-md font-medium px-1.5 py-0.5 rounded">
-                      {element.status}
+                      {item.status}
                     </span>
                   </td>
                   <td className="px-6 py-4">
@@ -67,7 +78,7 @@ const Index = () => {
                       Edit
                     </Link>
                     <Link
-                      to={`/reimbursement/detail/${element.code}`}
+                      to={`/reimbursement/detail/${item.code}`}
                       className="font-medium text-fg-brand hover:underline"
                     >
                       View
