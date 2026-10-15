@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { ReimbursementService } from "../../../services/ReimbursementService";
+import { AuthService } from "../../../services/AuthService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await ReimbursementService.login(credential);
+      const response = await AuthService.login(credential);
 
       const token = response.data.data.token;
       const userId = response.data.data.id;

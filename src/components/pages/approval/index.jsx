@@ -1,23 +1,42 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ReimbursementService } from "../../../services/ReimbursementService";
+import { jwtDecode } from "jwt-decode";
 
 const Approval = () => {
   const [reimburse, setReimburse] = useState();
 
   useEffect(() => {
     const fetchReimbursement = async () => {
-      const userId = localStorage.getItem("id")
+      const userId = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
+
       try {
-      const response = await ReimbursementService.viewReimbursementBySupervisorId(userId);
+        if (!token) {
+          console.error("Token not found");
+          return;
+        }
 
-      setReimburse(response.data.data);
+        const payload = jwtDecode(token);
+        console.log(payload);
+
+        const role = payload.role;
+        let response;
+        console.log(role);
+
+        if (role === "finance_approver") {
+          response = await ReimbursementService.viewReimbursementForFinance();
+        } else {
+          response = await ReimbursementService.viewReimbursementBySupervisorId(userId);
+        }
+
+        setReimburse(response.data.data);
       } catch (error) {
-        console.error(error)
+        console.error("Failed to fetch reimbursement:", error);
       }
-    }
+    };
 
-    fetchReimbursement()
+    fetchReimbursement();
   }, []);
   return (
     <>
@@ -27,69 +46,75 @@ const Approval = () => {
 
       <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
         <table className="w-full text-sm text-left rtl:text-right text-body">
-          <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
+          <thead className="text-sm text-body justify-items-center bg-neutral-secondary-soft border-b rounded-base border-default">
             <tr>
-              <th scope="col" className="px-6 py-3 font-medium">
+              <th scope="col" className="px-6 py-3 font-medium text-center">
                 Code
               </th>
-              <th scope="col" className="px-6 py-3 font-medium">
+              <th scope="col" className="px-6 py-3 font-medium text-center">
                 Date
               </th>
-              <th scope="col" className="px-6 py-3 font-medium">
+              <th scope="col" className="px-6 py-3 font-medium text-center">
                 Requester
               </th>
-              <th scope="col" className="px-6 py-3 font-medium">
+              <th scope="col" className="px-6 py-3 font-medium text-center">
                 Description
               </th>
-              <th scope="col" className="px-6 py-3 font-medium">
+              <th scope="col" className="px-6 py-3 font-medium text-center">
                 Status
               </th>
-
-              <th scope="col" className="px-6 py-3 font-medium content-evenly">
+              <th
+                scope="col"
+                className="px-6 py-3 font-medium content-evenly text-center"
+              >
                 Action
               </th>
             </tr>
           </thead>
           <tbody>
-            {reimburse?.map((item, idx) => {
-              return (
-                <tr key={idx} className="bg-neutral-primary border-b border-default">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                  >
-                    {item.requestNumber}
-                  </th>
-                  <td className="px-6 py-4">{item.submitDate}</td>
-                  <td className="px-6 py-4">{item.name}</td>
-                  <td className="px-6 py-4">{item.description}</td>
-                  <td className="px-6 py-4">
-                    <span className="bg-gray-200 text-heading text-md font-medium px-1.5 py-0.5 rounded">
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <Link
-                      to="/reimbursement/request"
-                      className="font-medium text-fg-brand hover:underline mr-4"
+            {reimburse?.map((item) => {
+              if (item.status === "WAITING_SUPERVISOR" || item.status === "WAITING_FINANCE" || item.status ===  "PAID" || item.status === "APPROVED" || item.status === "REJECTED") {
+                return (
+                  <tr className="bg-neutral-primary border-b border-default">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
                     >
-                      Edit
-                    </Link>
-                    <Link
-                      to={`/reimbursement/detail/${item.code}`}
-                      className="font-medium text-fg-brand hover:underline"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              );
+                      {item.requestNumber}
+                    </th>
+                    <td className="px-6 py-4 text-center">{item.submitDate}</td>
+                    <td className="px-6 py-4 text-center">{item.name}</td>
+                    <td className="px-6 py-4 text-center">{item.description}</td>
+                    <td className="px-6 py-4 text-center">
+                      <span className="bg-gray-200 text-heading text-md font-medium px-1.5 py-0.5 rounded">
+                        {item.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link
+                        to={`/approval/form/${item.id}`}
+                        state={{ reimbursement: item }}
+                        className="font-medium text-fg-brand hover:underline mr-4"
+                      >
+                        Process
+                      </Link>
+                      <Link
+                        to={`/reimbursement/detail/${item.id}`}
+                        state={{ reimbursement: item }}
+                        className="font-medium text-fg-brand hover:underline"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              }
             })}
           </tbody>
         </table>
       </div>
     </>
   );
-}
+};
 
 export default Approval;

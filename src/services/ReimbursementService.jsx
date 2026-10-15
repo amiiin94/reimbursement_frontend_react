@@ -1,15 +1,7 @@
 import ApiClient from "../config/ApiClient";
 
 export const ReimbursementService = {
-    // login
-    login: async(data) => {
-        try {
-            const response = await ApiClient.post(`api/user/login`, data)
-            return response
-        } catch (error) {
-            throw error.response ? error.response.data: error
-        }
-    },
+    
 
     // View reimbursement
      viewReimbursement: async(id) => {
@@ -44,16 +36,7 @@ export const ReimbursementService = {
         }
     },
 
-    //Approval process
-    approvalProcess: async(data) => {
-        try {
-            const response = await ApiClient.post(`api/approval/process`, data)
-            return response
-        } catch (error) {
-            throw error.response ? error.response.data: error
-            
-        }
-    },
+    
 
     //Approval view
     viewApproval: async() => {
@@ -70,6 +53,28 @@ export const ReimbursementService = {
     viewReimbursementBySupervisorId: async (id) => {
         try {
             const response = await ApiClient.get(`api/reimbursement/supervisor/${id}`)
+            return response
+        } catch (error) {
+            throw error.response ? error.response.data: error
+            
+        }
+    },
+
+    //view item by reimbursement id
+    viewItemByReimbursementId: async (id) => {
+        try {
+            const response = await ApiClient.get(`api/reimbursement/item/${id}`)
+            return response
+        } catch (error) {
+            throw error.response ? error.response.data: error
+            
+        }
+    },
+
+    //view reimbursement for finance
+    viewReimbursementForFinance: async () => {
+        try {
+            const response = await ApiClient.get(`api/reimbursement/finance`)
             return response
         } catch (error) {
             throw error.response ? error.response.data: error
