@@ -3,14 +3,23 @@ import ApiClient from "../config/ApiClient";
 export const ReimbursementService = {
     
 
-    // View reimbursement
-     viewReimbursement: async(id) => {
+    // View reimbursement by ID
+    viewReimbursementById: async(id) => {
         try {
-            const response = await ApiClient.get(`api/reimbursement/user/${id}`)
-            return response
+            const response = await ApiClient.get(`api/reimbursement/${id}`);
+            return response;
         } catch (error) {
-            throw error.response ? error.response.data: error
-            
+            throw error.response ? error.response.data : error;
+        }
+    },
+
+    // View reimbursement by user ID
+    viewReimbursement: async(id) => {
+        try {
+            const response = await ApiClient.get(`api/reimbursement/user/${id}`);
+            return response;
+        } catch (error) {
+            throw error.response ? error.response.data: error;
         }
     },
 
